@@ -1,6 +1,6 @@
 dashboard "rds_db_instance_dashboard" {
 
-  title         = "AWS RDS DB Instance Dashboard"
+  title         = "AWS RDS DB Instance Dashboard TEST TEST TEST"
   documentation = file("./dashboards/rds/docs/rds_db_instance_dashboard.md")
 
   tags = merge(local.rds_common_tags, {
