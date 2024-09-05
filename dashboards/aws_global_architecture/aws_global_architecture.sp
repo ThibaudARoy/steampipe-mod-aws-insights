@@ -1,7 +1,7 @@
 dashboard "aws_global_architecture" {
 
   title         = "AWS Global Architecture"
-  documentation = file("./dashboards/aws/docs/aws_global_architecture.md")
+  documentation = file("./dashboards/aws_global_architecture/docs/aws_global_architecture.md")
 
   input "resource_arn" {
     title = "Select a resource:"
