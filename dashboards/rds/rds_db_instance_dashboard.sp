@@ -82,7 +82,7 @@ dashboard "rds_db_instance_dashboard" {
     }
 
     chart {
-      title = "Logging Status"
+      title = "Logging Status WOWW"
       query = query.rds_db_instance_logging_status
       type  = "donut"
       width = 4
