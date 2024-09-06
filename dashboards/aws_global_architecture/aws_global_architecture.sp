@@ -37,24 +37,3 @@ query "ec2_instance_input_new" {
       title;
   EOQ
 }
-
-# Node definition
-node "ec2_instance_with_tags" {
-  sql = <<-EOQ
-    select
-      arn as id,
-      title as title,
-      jsonb_build_object(
-        'Instance ID', instance_id,
-        'Type', instance_type,
-        'State', instance_state,
-        'Tags', tags
-      ) as properties
-    from
-      aws_ec2_instance
-    where
-      arn = $1
-  EOQ
-
-  param "ec2_instance_arn" {}
-}
