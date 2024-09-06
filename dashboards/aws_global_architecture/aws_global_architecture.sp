@@ -1,7 +1,7 @@
-dashboard "ec2_instance_detail" {
+dashboard "aws_global_architecture" {
 
-  title         = "AWS EC2 Instance Detail"
-  documentation = file("./dashboards/ec2/docs/ec2_instance_detail.md")
+  title         = "AWS Global Architecture"
+  documentation = file("./dashboards/aws_global_architecture/docs/aws_global_architecture.md")
 
   input "instance_arn" {
     title = "Select an instance:"
