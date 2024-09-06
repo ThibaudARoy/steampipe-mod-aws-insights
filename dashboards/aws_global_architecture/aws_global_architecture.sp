@@ -15,7 +15,7 @@ dashboard "aws_global_architecture" {
   container {
     card {
       width = 2
-      query = aws_insights.ec2.query.ec2_instance_status
+      query = aws_insights.ec2.ec2_instance_detail.query.ec2_instance_status
       args  = [self.input.instance_arn.value]
     }
 
