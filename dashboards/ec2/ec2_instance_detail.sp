@@ -46,6 +46,11 @@ dashboard "ec2_instance_detail" {
     }
   }
 
+with "iam_instance_profile_for_ec2_instance" {
+  query = query.iam_instance_profile_for_ec2_instance
+  args  = [self.input.instance_arn.value]
+}
+
   with "ebs_volumes_for_ec2_instance" {
     query = query.ebs_volumes_for_ec2_instance
     args  = [self.input.instance_arn.value]
@@ -125,6 +130,12 @@ dashboard "ec2_instance_detail" {
           ebs_volume_arns = with.ebs_volumes_for_ec2_instance.rows[*].volume_arn
         }
       }
+    node {
+      base = node.iam_instance_profile
+      args = {
+        iam_instance_profile_arns = with.iam_instance_profile_for_ec2_instance.rows[*].instance_profile_arn
+      }
+}
 
       node {
         base = node.ec2_application_load_balancer
@@ -269,7 +280,12 @@ dashboard "ec2_instance_detail" {
           ec2_classic_load_balancer_arns = with.ec2_classic_load_balancers_for_ec2_instance.rows[*].classic_load_balancer_arn
         }
       }
-
+      edge {
+        base = edge.ec2_instance_to_iam_instance_profile
+        args = {
+          ec2_instance_arns = [self.input.instance_arn.value]
+        }
+      }
       edge {
         base = edge.ec2_instance_to_ebs_volume
         args = {
@@ -325,7 +341,7 @@ dashboard "ec2_instance_detail" {
           ec2_instance_arns = [self.input.instance_arn.value]
         }
       }
-      
+
       edge {
         base = edge.ec2_network_interface_to_vpc_eip
         args = {
@@ -1113,5 +1129,18 @@ query "ec2_instance_cpu_cores" {
       region = split_part($1, ':', 4)
       and account_id = split_part($1, ':', 5)
       and arn = $1;
+  EOQ
+}
+
+query "iam_instance_profile_for_ec2_instance" {
+  sql = <<-EOQ
+    select
+      iam_instance_profile_arn as instance_profile_arn
+    from
+      aws_ec2_instance
+    where
+      arn = $1
+      and account_id = split_part($1, ':', 5)
+      and region = split_part($1, ':', 4);
   EOQ
 }
