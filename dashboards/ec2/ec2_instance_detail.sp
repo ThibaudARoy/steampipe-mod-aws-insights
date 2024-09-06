@@ -171,6 +171,13 @@ dashboard "ec2_instance_detail" {
       }
 
       node {
+        base = node.ec2_instance
+        args = {
+          ec2_instance_arns = [self.input.instance_arn.value]
+        }
+      }
+
+      node {
         base = node.ec2_key_pair
         args = {
           ec2_instance_arns = [self.input.instance_arn.value]
@@ -312,6 +319,13 @@ dashboard "ec2_instance_detail" {
         }
       }
 
+      edge {
+        base = edge.ec2_load_balancer_to_ec2_target_group
+        args = {
+          ec2_instance_arns = [self.input.instance_arn.value]
+        }
+      }
+      
       edge {
         base = edge.ec2_network_interface_to_vpc_eip
         args = {
