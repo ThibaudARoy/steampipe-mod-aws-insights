@@ -17,7 +17,7 @@ dashboard "aws_global_architecture" {
       node {
         base = node.ec2_instance
         args = {
-          ec2_instance_arn = self.input.instance_arn.value
+          ec2_instance_arns = [self.input.instance_arn.value]
         }
       }
 
@@ -51,10 +51,8 @@ query "ec2_instance_input_new" {
   EOQ
 }
 
-# Node definitions
-node "ec2_instance" {
-  category = category.ec2_instance
-
+# Node queries
+query "ec2_instance_node" {
   sql = <<-EOQ
     select
       arn as id,
@@ -72,41 +70,42 @@ node "ec2_instance" {
     from
       aws_ec2_instance
     where
-      arn = $1
+      arn = any($1);
   EOQ
 
-  param "ec2_instance_arn" {}
+  param "ec2_instance_arns" {}
 }
 
-node "ec2_instance_tags" {
-  category = category.ec2_tag
-
+query "ec2_instance_tags_node" {
   sql = <<-EOQ
     select
-      arn || ':tags' as id,
-      'Tags' as title,
-      tags as properties
+      arn || ':' || tag ->> 'Key' as id,
+      tag ->> 'Key' as title,
+      jsonb_build_object(
+        'Key', tag ->> 'Key',
+        'Value', tag ->> 'Value'
+      ) as properties
     from
-      aws_ec2_instance
+      aws_ec2_instance,
+      jsonb_array_elements(tags_src) as tag
     where
-      arn = $1
+      arn = $1;
   EOQ
 
   param "ec2_instance_arn" {}
 }
 
-# Edge definition
-edge "ec2_instance_to_tags" {
-  title = "has tags"
-
+# Edge query
+query "ec2_instance_to_tags_edge" {
   sql = <<-EOQ
     select
       arn as from_id,
-      arn || ':tags' as to_id
+      arn || ':' || tag ->> 'Key' as to_id
     from
-      aws_ec2_instance
+      aws_ec2_instance,
+      jsonb_array_elements(tags_src) as tag
     where
-      arn = $1
+      arn = $1;
   EOQ
 
   param "ec2_instance_arn" {}
