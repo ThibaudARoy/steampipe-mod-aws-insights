@@ -164,6 +164,13 @@ dashboard "ec2_instance_detail" {
       }
 
       node {
+        base = node.ec2_instance
+        args = {
+          ec2_instance_arns = [self.input.instance_arn.value]
+        }
+      }
+
+      node {
         base = node.ec2_key_pair
         args = {
           ec2_instance_arns = [self.input.instance_arn.value]
