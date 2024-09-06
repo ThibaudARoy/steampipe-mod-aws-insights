@@ -5,7 +5,7 @@ dashboard "ec2_instance_detail" {
 
   input "instance_arn" {
     title = "Select an instance:"
-    query = query.ec2_instance_input
+    query = query.ec2_instance_input_new
     width = 4
   }
 
@@ -26,7 +26,7 @@ dashboard "ec2_instance_detail" {
 }
 
 # Input query
-query "ec2_instance_input" {
+query "ec2_instance_input_new" {
   sql = <<-EOQ
     select
       title as label,
