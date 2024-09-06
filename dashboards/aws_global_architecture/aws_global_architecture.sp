@@ -1,7 +1,7 @@
 dashboard "aws_global_architecture" {
 
   title         = "AWS Global Architecture Detail"
-  documentation = file("./dashboards/aws_global_architecture/docs/aws_global_architecture_detail.md")
+  documentation = file("./dashboards/aws_global_architecture/docs/aws_global_architecture.md")
 
   input "instance_arn" {
     title = "Select an instance:"
