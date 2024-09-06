@@ -1,4 +1,4 @@
-dashboard "AWS Global Architecture" {
+dashboard "aws_global_architecture" {
 
   title         = "AWS Global Architecture Detail"
   documentation = file("./dashboards/aws_global_architecture/docs/aws_global_architecture_detail.md")
