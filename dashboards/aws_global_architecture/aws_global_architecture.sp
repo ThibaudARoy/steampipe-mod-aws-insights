@@ -4,4 +4,6 @@ dashboard "aws_global_architecture" {
 
   tags = merge(local.ec2_common_tags, {
     type = "Detail"
-  })
+  }
+  )
+}
